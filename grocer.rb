@@ -18,16 +18,16 @@ def apply_coupons(cart, coupons)
   coupons.each {|coupon|
     cart.each {|item, chars|
       answer[item] = chars
-      if coupon[:item] == item
+      if coupon[:item] == item && chars[:count] >= coupon[:num]
         answer[item][:count] = chars[:count] - coupon[:num]
-        answer[item + " W/COUPON"] = {price: coupon[:cost], clearance: chars[:clearance], count: 1 }
+        answer.delete(item) if answer[item][:count] == 0
+        if not answer.has_key?(item + " W/COUPON")
+          answer[item + " W/COUPON"] = {price: coupon[:cost], clearance: chars[:clearance], count: 1 }
+        else
+          answer[item + " W/COUPON"][:count] += 1
+        end
       end
     }
-  }
-  coupons.uniq.each {|uni_coupon|
-    if cart.has_key?(uni_coupon[:item])
-      answer[uni_coupon[:item] + " W/COUPON"][:count] = coupons.count(uni_coupon)
-    end
   }
   return answer
 end
@@ -42,5 +42,5 @@ def apply_clearance(cart)
 end
 
 def checkout(cart, coupons)
-  # code here
+  
 end
