@@ -18,8 +18,8 @@ def apply_coupons(cart, coupons)
   coupons.each {|coupon|
     cart.each {|item, chars|
       answer[item] = chars
-      if coupon[:item] == item && chars[:count] >= coupon[:num]
-        answer[item][:count] = chars[:count] - coupon[:num]
+      if coupon[:item] == item && answer[item][:count] >= coupon[:num]
+        answer[item][:count] = answer[item][:count] - coupon[:num]
         answer.delete(item) if answer[item][:count] == 0
         if not answer.has_key?(item + " W/COUPON")
           answer[item + " W/COUPON"] = {price: coupon[:cost], clearance: chars[:clearance], count: 1 }
